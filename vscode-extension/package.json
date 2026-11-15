@@ -1,0 +1,28 @@
+{
+  "name": "rx-agent",
+  "displayName": "RX Coding Agent",
+  "description": "Chat with the RX coding agent inside VS Code. Hosts the RX web UI; approvals, diffs, cancel and undo included.",
+  "version": "1.0.0",
+  "publisher": "rx",
+  "license": "MIT",
+  "engines": { "vscode": "^1.85.0" },
+  "categories": ["AI", "Other"],
+  "main": "./out/extension.js",
+  "activationEvents": [],
+  "contributes": {
+    "commands": [
+      { "command": "rx.open", "title": "RX: Open Agent" },
+      { "command": "rx.startServer", "title": "RX: Start Local Server" },
+      { "command": "rx.setToken", "title": "RX: Set Server Token" }
+    ],
+    "configuration": {
+      "title": "RX",
+      "properties": {
+        "rx.serverUrl": { "type": "string", "default": "http://127.0.0.1:8000", "description": "Where `rx serve` is listening. Must be loopback unless you know what you are doing." },
+        "rx.serverCommand": { "type": "string", "default": "rx serve --workspace-root \"${workspaceFolder}\" --max-mode ask", "description": "Command used by 'RX: Start Local Server'." }
+      }
+    }
+  },
+  "scripts": { "compile": "tsc -p ./", "watch": "tsc -watch -p ./", "package": "vsce package" },
+  "devDependencies": { "@types/node": "^20.0.0", "@types/vscode": "^1.85.0", "typescript": "^5.4.0", "@vscode/vsce": "^3.0.0" }
+}

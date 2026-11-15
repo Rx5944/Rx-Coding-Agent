@@ -1,0 +1,41 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "rx-coding-agent"
+version = "1.0.6"
+description = "A production-grade, dependency-free coding agent: async loop, real sandboxing, permissions, undo, evals."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+# The agent core is intentionally stdlib-only.
+dependencies = []
+
+[project.optional-dependencies]
+server = ["fastapi>=0.115", "uvicorn[standard]>=0.30"]
+dev = ["pytest>=8", "ruff>=0.8", "mypy>=1.10"]
+
+[project.scripts]
+rx = "rx_agent.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+rx_agent = ["web/*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
+ignore = ["E501"]
+
+[tool.mypy]
+python_version = "3.11"
+ignore_missing_imports = true

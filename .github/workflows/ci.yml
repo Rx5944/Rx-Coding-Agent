@@ -1,0 +1,27 @@
+name: ci
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix: { python: ["3.11", "3.12"] }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "${{ matrix.python }}" }
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - run: sudo apt-get update && sudo apt-get install -y ripgrep bubblewrap
+      - run: pip install -e ".[server,dev]"
+      - run: python -m unittest discover -s tests -t . -q
+      - run: rx eval --oracle            # end-to-end harness self-test, no API key needed
+      - run: cd vscode-extension && npm install && npm run compile
+  lint:   # informational until the project's ruff/mypy baseline is settled
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - run: pip install -e ".[server,dev]"
+      - run: ruff check . && mypy src

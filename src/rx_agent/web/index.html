@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RX · coding agent</title>
+<link rel="stylesheet" href="/ui/style.css">
+</head>
+<body>
+<header class="bar">
+  <div class="brand"><span class="mark">rx</span><span class="conn" id="conn" data-state="off" title="disconnected"></span></div>
+  <label class="field grow"><span>workspace</span><input id="workspace" spellcheck="false" autocomplete="off" placeholder="server default"></label>
+  <label class="field"><span>mode</span>
+    <select id="mode">
+      <option value="plan">plan · read-only</option>
+      <option value="ask" selected>ask · approve edits</option>
+      <option value="auto_edit">auto-edit</option>
+      <option value="auto">auto</option>
+    </select>
+  </label>
+  <button class="ghost" id="newSession" title="Start a fresh conversation">New</button>
+  <button class="ghost" id="undo" title="Restore the workspace to before the last run">Undo</button>
+</header>
+
+<main class="layout">
+  <section class="stream" aria-label="Conversation">
+    <div id="log" class="log" role="log" aria-live="polite">
+      <div class="empty" id="empty">
+        <p class="empty-title">Describe what to build or fix.</p>
+        <p>RX reads your code, edits it, runs your tests, and shows every step. Risky actions wait for your approval.</p>
+      </div>
+    </div>
+    <div id="dock" class="dock" role="alert" aria-live="assertive"></div>
+    <form class="composer" id="composer">
+      <textarea id="task" rows="3" placeholder="e.g. Fix the failing test in tests/test_api.py   (Ctrl/⌘+Enter to run)" aria-label="Task"></textarea>
+      <div class="composer-row">
+        <span class="hint" id="hint"></span>
+        <button type="button" class="stop" id="stop" hidden>Stop</button>
+        <button type="submit" class="go" id="go">Run</button>
+      </div>
+    </form>
+  </section>
+
+  <aside class="ledger" aria-label="Run details">
+    <section><h2>Plan</h2><ul id="todos" class="todos"><li class="muted">No plan yet</li></ul></section>
+    <section><h2>Files changed</h2><ul id="files" class="files"><li class="muted">None</li></ul></section>
+    <section><h2>Verification</h2><ul id="checks" class="files"><li class="muted">Not run</li></ul></section>
+    <section><h2>Usage</h2><p id="usage" class="muted mono">0 tokens</p></section>
+  </aside>
+</main>
+
+<dialog id="tokenDialog">
+  <form method="dialog" id="tokenForm">
+    <h2>Server token</h2>
+    <p>Paste the token printed by <code>rx serve</code>.</p>
+    <input id="tokenInput" type="password" autocomplete="off" spellcheck="false" aria-label="Server token">
+    <button class="go" type="submit">Connect</button>
+  </form>
+</dialog>
+<script src="/ui/app.js"></script>
+</body>
+</html>
